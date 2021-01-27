@@ -1,0 +1,12 @@
+<div fxLayout="column" fxLayoutGap="3%" fxFill  >
+
+<div fxLayout="column" fxLayoutGap="3%" fxFlex *ngIf="retornoServidor == true; else loading " >
+  <app-cadastro  [isVisualizar]=false [(cadastro)]="cadastro" (salvar)="salvarCadastro($event)" ></app-cadastro>
+
+</div>
+
+<ng-template #loading  fxFlexAlign="center" >
+  <mat-spinner fxFlexAlign="center" ></mat-spinner>
+</ng-template>
+</div>
+

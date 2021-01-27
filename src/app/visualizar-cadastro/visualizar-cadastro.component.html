@@ -1,0 +1,13 @@
+<div fxLayout="column" fxLayoutGap="3%" fxFill *ngIf="retornoServidor == true ; else loading" >
+  <app-cadastro [isVisualizar]=true  [(cadastro)]="cadastro" ></app-cadastro>
+
+  <div fxLayoutAlign="center" >
+
+    <button  mat-raised-button  routerLink="/"
+            routerLinkActive="active" >VOLTAR</button>
+  </div>
+
+</div>
+<ng-template #loading  fxFlexAlign="center" >
+  <mat-spinner fxFlexAlign="center" ></mat-spinner>
+</ng-template>

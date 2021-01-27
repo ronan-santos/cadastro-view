@@ -1,0 +1,90 @@
+<mat-card   >
+ 
+  <form *ngIf="dadosCompletos == true, else loading "  fxLayout="column" [formGroup]="cadastroForm" fxLayoutGap="3%"  >
+    <mat-form-field fxFlex   >
+      <mat-label>Nome</mat-label>
+      <input matInput  formControlName="nome" [readonly]="isVisualizar" >
+      <mat-error *ngIf="!isVisualizar && nome.hasError('required')" >
+        O campo é <strong>obrigatório</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="2%" >
+
+      <mat-radio-group fxLayout="row" fxLayout.gt-xs="row" fxLayoutGap="2%" formControlName="tipoDocumento"   >
+        <mat-radio-button (click)="atualizarValorDocumento()" [checked]="tipoDocumento.value == 1" fxLayout="row" [disabled]="isVisualizar" value="1" >Pessoa Fisica</mat-radio-button>
+        <mat-radio-button (click)="atualizarValorDocumento()" [checked]="tipoDocumento.value == 2" fxLayout="row" [disabled]="isVisualizar" value="2">Pessoa Jurídica</mat-radio-button>
+      </mat-radio-group>
+
+        <mat-form-field fxFlex="70" *ngIf="cadastroForm.get('tipoDocumento').value == 1 "  >
+          <mat-label>CPF</mat-label>
+          <input matInput mask="000.000.000-00" formControlName="documento" [readonly]="isVisualizar" >
+          <mat-error *ngIf="!isVisualizar && documento.hasError('required')" >
+            O campo é <strong>obrigatório</strong>
+          </mat-error>
+
+        </mat-form-field>
+
+        <mat-form-field fxFlex="70" *ngIf="cadastroForm.get('tipoDocumento').value == 2 " >
+          <mat-label>CNPJ</mat-label>
+          <input matInput mask="00.000.000/0000-00" formControlName="documento" [readonly]="isVisualizar" >
+          <mat-error *ngIf="!isVisualizar && documento.hasError('required')" >
+            O campo é <strong>obrigatório</strong>
+          </mat-error>
+        </mat-form-field>
+
+    </div>
+
+
+      <mat-form-field fxFlex="40" *ngIf="cadastroForm.get('tipoDocumento').value == 1 " >
+        <mat-label>Data de Nascimento</mat-label>
+        <input matInput [matDatepicker]="picker" readonly  formControlName="nascimento" [readonly]="isVisualizar" >
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="!isVisualizar && nascimento.hasError('required')" >
+          O campo é <strong>obrigatório</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="cadastroForm.get('tipoDocumento').value == 1 "   >
+        <mat-label>RG</mat-label>
+        <input matInput mask="999999999" formControlName="identidade" [readonly]="isVisualizar" >
+        <mat-error *ngIf="!isVisualizar && identidade.hasError('required')" >
+          O campo é <strong>obrigatório</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <div formArrayName="telefones" fxLayout="column"  >
+
+        <div fxLayout="row" *ngFor="let item of telefones.controls; let i=index; let last = last  " >
+          <mat-form-field fxFlex="30" >
+
+            <mat-label>Telefone</mat-label>
+            <input matInput mask="00000-0000||0000-0000" [formControlName]="i" [readonly]="isVisualizar" >
+          </mat-form-field>
+
+          <ng-container *ngIf="last; else elseTemplate">
+            <button  mat-icon-button aria-label="Adicionar" [disabled]="isVisualizar" color="primary" (click)="adicionarTelefone()" >
+              <mat-icon>add_circle</mat-icon>
+            </button>
+          </ng-container>
+          <ng-template #elseTemplate>
+            <button  mat-icon-button aria-label="Remover" [disabled]="isVisualizar" color="warn" (click)="removerTelefone(i)" >
+              <mat-icon>remove_circle</mat-icon>
+            </button>
+          </ng-template>
+        </div>
+      </div>
+
+
+  </form>
+  <div  fxLayout="row" fxLayoutGap="2%" fxLayoutAlign="center"  *ngIf="isVisualizar == false " >
+    <button mat-raised-button  routerLink="/" routerLinkActive="active" >CANCELAR</button>
+    <button mat-raised-button color="primary" (click)="salvarContato()" >SALVAR</button>
+  </div>
+
+  <ng-template #loading  fxFlexAlign="center" >
+    <mat-spinner fxFlexAlign="center" ></mat-spinner>
+  </ng-template>
+
+</mat-card>
